@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Đối Chiếu Học Bổng Đài Loan — Thiên Di</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F3ECDD;
+    --paper-dark: #E8DEC8;
+    --paper-darker: #DDCFAE;
+    --ink: #241F1C;
+    --ink-soft: #5B5347;
+    --cinnabar: #C13B2E;
+    --cinnabar-dark: #96281E;
+    --jade: #3C6E52;
+    --jade-soft: #E4EEE7;
+    --gold: #A97727;
+    --gold-soft: #F3E7CC;
+    --slate: #8A8377;
+    --blue-info: #3A5A78;
+    --blue-soft: #E4EBF0;
+    --shadow: 0 1px 2px rgba(36,31,28,0.06), 0 4px 14px rgba(36,31,28,0.08);
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, rgba(36,31,28,0.045) 1px, transparent 0) 0 0/22px 22px,
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold-soft); color:var(--ink);}
+  .shell{max-width:1180px; margin:0 auto; padding:28px 20px 80px;}
+
+  .masthead{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:20px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom:16px; margin-bottom:22px; flex-wrap:wrap;
+  }
+  .masthead .brand-eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--cinnabar); margin:0 0 6px;
+  }
+  .masthead h1{
+    font-family:var(--font-display); font-weight:600; font-size:clamp(26px,3.4vw,38px);
+    margin:0; line-height:1.05; letter-spacing:-0.01em;
+  }
+  .masthead .sub{font-size:13.5px; color:var(--ink-soft); margin-top:6px; max-width:520px;}
+  .masthead .meta{
+    font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); text-align:right;
+    display:flex; flex-direction:column; gap:4px; white-space:nowrap;
+  }
+  .meta .dot{color:var(--jade); font-weight:600;}
+
+  .banner{
+    display:flex; align-items:center; gap:14px;
+    background:var(--ink); color:var(--paper);
+    border-radius:3px; padding:12px 16px; margin-bottom:22px;
+    box-shadow:var(--shadow);
+  }
+  .banner .seal{
+    flex:0 0 auto; width:38px;height:38px;border-radius:50%;
+    border:2px solid var(--cinnabar); color:var(--cinnabar);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:10px; font-weight:600; text-align:center; line-height:1.2;
+  }
+  .banner b{font-family:var(--font-display); font-weight:600;}
+  .banner .txt{flex:1; font-size:13px; line-height:1.5;}
+  .banner .txt span{color:#E8C97A;}
+  .banner button{
+    flex:0 0 auto; background:transparent; border:1px solid rgba(243,236,221,.35); color:var(--paper);
+    font-family:var(--font-mono); font-size:11px; padding:6px 10px; border-radius:2px; cursor:pointer;
+  }
+  .banner button:hover{border-color:var(--paper);}
+
+  .grid{display:grid; grid-template-columns: 320px 1fr; gap:26px; align-items:start;}
+  @media (max-width: 860px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--paper); border:1px solid var(--paper-darker);
+    border-radius:4px; box-shadow:var(--shadow); padding:20px; position:sticky; top:20px;
+  }
+  .panel h2{ font-family:var(--font-display); font-size:16px; font-weight:600; margin:0 0 4px; }
+  .panel .hint{font-size:12px; color:var(--ink-soft); margin:0 0 18px; line-height:1.5;}
+  .save-status{font-family:var(--font-mono); font-size:11px; margin:10px 0 0; min-height:14px; text-align:center;}
+  .save-status.ok{color:var(--jade);}
+  .save-status.err{color:var(--cinnabar);}
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px;
+  }
+  .field input[type=number], .field input[type=text], .field select{
+    width:100%; border:1px solid var(--paper-darker); background:#fff;
+    padding:9px 10px; border-radius:3px; font-family:var(--font-body); font-size:14px; color:var(--ink);
+  }
+  .field select{appearance:none; -webkit-appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235B5347'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center; padding-right:28px;
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .field-section-title{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--cinnabar); border-top:1px dashed var(--paper-darker); padding-top:14px; margin:4px 0 14px;
+  }
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
+  @media (max-width: 400px){ .row3{grid-template-columns:1fr;} }
+  .toggle-group{display:flex; flex-direction:column; gap:8px;}
+  .toggle-opt{
+    display:flex; align-items:center; gap:9px; border:1px solid var(--paper-darker);
+    border-radius:3px; padding:9px 10px; cursor:pointer; font-size:13px; background:#fff;
+  }
+  .toggle-opt.active{border-color:var(--jade); background:var(--jade-soft);}
+  .toggle-opt input{accent-color:var(--jade);}
+  .btn-primary{
+    width:100%; background:var(--cinnabar); color:#fff; border:none; border-radius:3px;
+    padding:12px 14px; font-family:var(--font-body); font-weight:600; font-size:14px; cursor:pointer;
+    letter-spacing:.01em; margin-top:6px;
+  }
+  .btn-primary:hover{background:var(--cinnabar-dark);}
+  .mode-switch{
+    display:flex; border:1px solid var(--paper-darker); border-radius:3px; overflow:hidden; margin-bottom:18px;
+  }
+  .mode-switch button{
+    flex:1; background:#fff; border:none; padding:8px 6px; font-family:var(--font-mono);
+    font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; color:var(--ink-soft);
+  }
+  .mode-switch button.active{background:var(--ink); color:var(--paper);}
+
+  .empty-state{
+    border:1px dashed var(--paper-darker); border-radius:4px; padding:50px 30px; text-align:center; color:var(--ink-soft);
+  }
+  .empty-state .glyph{font-size:28px; margin-bottom:10px; color:var(--slate);}
+  .empty-state p{font-size:13.5px; max-width:380px; margin:6px auto 0; line-height:1.6;}
+
+  .profile-result{
+    display:flex; gap:16px; align-items:center; background:var(--ink); color:var(--paper);
+    border-radius:4px; padding:18px 20px; margin-bottom:16px; box-shadow:var(--shadow);
+  }
+  .score-card{
+    background:#fff; border:1px solid var(--paper-darker); border-radius:4px;
+    padding:16px 18px; margin-bottom:20px; box-shadow:var(--shadow);
+  }
+  .score-total{display:flex; align-items:baseline; gap:7px; margin-bottom:14px;}
+  .score-total b{font-family:var(--font-display); font-size:30px; font-weight:600; line-height:1;}
+  .score-total span{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);}
+  .score-row{display:grid; grid-template-columns:150px 1fr 46px; align-items:center; gap:10px; margin-bottom:9px;}
+  @media (max-width:480px){ .score-row{grid-template-columns:100px 1fr 40px; gap:6px;} }
+  .score-label{font-family:var(--font-mono); font-size:10px; color:var(--ink-soft); letter-spacing:.02em;}
+  .score-bar-track{height:7px; background:var(--paper-dark); border-radius:4px; overflow:hidden;}
+  .score-bar-fill{height:100%; background:var(--jade); border-radius:4px;}
+  .score-pts{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); text-align:right;}
+  .profile-stamp{
+    flex:0 0 auto; width:64px; height:64px; border-radius:50%; border:2.5px solid var(--gold);
+    color:var(--gold); display:flex; align-items:center; justify-content:center; flex-direction:column;
+    transform:rotate(-8deg); font-family:var(--font-mono);
+  }
+  .profile-stamp b{font-family:var(--font-display); font-size:22px; line-height:1;}
+  .profile-stamp span{font-size:8px; letter-spacing:.08em;}
+  .profile-result h3{font-family:var(--font-display); font-size:18px; margin:0 0 4px; font-weight:600;}
+  .profile-result p{font-size:12.5px; margin:0; color:#D8D0BF; line-height:1.6;}
+
+  .group-heading{ display:flex; align-items:baseline; gap:10px; margin:26px 0 12px; }
+  .group-heading h4{ font-family:var(--font-display); font-size:15px; font-weight:600; margin:0; white-space:nowrap; }
+  .group-heading .rule{flex:1; height:1px; background:var(--paper-darker);}
+  .group-heading .count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+
+  .ticket{
+    position:relative; display:flex; background:#fff; border:1px solid var(--paper-darker);
+    border-radius:4px; box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden;
+  }
+  .ticket-main{flex:1; padding:14px 16px; min-width:0;}
+  .ticket-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .ticket-top h5{font-family:var(--font-display); font-size:16px; font-weight:600; margin:0;}
+  .ticket-city{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:3px;}
+  .stars{color:var(--gold); font-size:12px; letter-spacing:1px; white-space:nowrap; flex:0 0 auto;}
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:10.5px;
+    padding:3px 8px; border-radius:20px; margin-top:9px; letter-spacing:.02em;
+  }
+  .badge.green{background:var(--jade-soft); color:var(--jade);}
+  .badge.yellow{background:var(--gold-soft); color:var(--gold);}
+  .badge.blue{background:var(--blue-soft); color:var(--blue-info);}
+  .ticket-desc{font-size:13px; color:var(--ink-soft); margin:8px 0 0; line-height:1.55;}
+  .ticket-note{
+    font-size:12px; color:var(--ink-soft); margin-top:8px; padding-top:8px;
+    border-top:1px dashed var(--paper-darker); line-height:1.6;
+  }
+  .ticket-note b{color:var(--ink);}
+  .deadline-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:10.5px; color:var(--cinnabar);
+    margin-top:8px; border:1px solid var(--cinnabar); padding:2px 7px; border-radius:2px;
+  }
+  .official-link{margin-top:9px;}
+  .official-link a{
+    font-family:var(--font-mono); font-size:11px; color:var(--blue-info); text-decoration:none;
+    border-bottom:1px solid var(--blue-soft); padding-bottom:1px;
+  }
+  .official-link a:hover{border-bottom-color:var(--blue-info);}
+  .criteria-box{
+    margin-top:10px; border-top:1px dashed var(--paper-darker); padding-top:8px;
+  }
+  .criteria-box summary{
+    cursor:pointer; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.03em;
+    color:var(--blue-info); list-style:none; outline:none;
+  }
+  .criteria-box summary::-webkit-details-marker{display:none;}
+  .criteria-box summary::before{content:"▸ ";}
+  .criteria-box[open] summary::before{content:"▾ ";}
+  .criteria-box .crit-block{margin-top:8px; font-size:12px; line-height:1.6; color:var(--ink-soft);}
+  .criteria-box .crit-block b{display:block; color:var(--ink); font-family:var(--font-mono); font-size:10px;
+    text-transform:uppercase; letter-spacing:.04em; margin-bottom:3px;}
+  .criteria-box .crit-block + .crit-block{margin-top:10px;}
+  .ticket-stub{
+    flex:0 0 76px; background:var(--paper); border-left:2px dashed var(--paper-darker);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    position:relative; padding:10px 6px;
+  }
+  .ticket-stub::before, .ticket-stub::after{
+    content:''; position:absolute; left:-8px; width:16px; height:16px; border-radius:50%; background:var(--paper);
+  }
+  .ticket-stub::before{top:-8px;}
+  .ticket-stub::after{bottom:-8px;}
+  .ticket-stub .tier-label{
+    font-family:var(--font-mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); text-align:center; line-height:1.4;
+  }
+  .fit-stamp{
+    font-family:var(--font-mono); font-size:9px; font-weight:600; letter-spacing:.05em;
+    color:var(--jade); border:1.5px solid var(--jade); border-radius:50%; width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center; text-align:center; transform:rotate(-10deg); line-height:1.15;
+  }
+  .special-card{ border:1.5px solid var(--gold); background:var(--gold-soft); }
+
+  .legend{
+    margin-top:34px; border-top:1px solid var(--paper-darker); padding-top:16px;
+    display:flex; gap:22px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft);
+  }
+  .legend .item{display:flex; align-items:center; gap:7px;}
+  .legend .dotc{width:9px; height:9px; border-radius:50%; display:inline-block;}
+
+  .disclaimer{
+    margin-top:16px; font-size:11.5px; color:var(--ink-soft); background:var(--paper-dark);
+    border-radius:3px; padding:10px 12px; line-height:1.6;
+  }
+  .print-bar{display:flex; justify-content:flex-end; margin-top:22px;}
+  .print-bar button{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em; background:#fff;
+    border:1px solid var(--ink); color:var(--ink); padding:8px 14px; border-radius:3px; cursor:pointer;
+  }
+  .print-bar button:hover{background:var(--ink); color:var(--paper);}
+  .hidden{display:none !important;}
+
+  @media print{
+    .panel, .mode-switch, .print-bar, .banner{display:none !important;}
+    .grid{grid-template-columns:1fr !important;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="masthead">
+    <div>
+      <p class="brand-eyebrow">Thiên Di Education &amp; Immigration</p>
+      <h1>Đối Chiếu Học Bổng Đài Loan</h1>
+      <p class="sub">Nhập hồ sơ khách để tự động khớp nhóm trường &amp; định hướng học bổng phù hợp — bậc Thạc sĩ.</p>
+    </div>
+    <div class="meta">
+      <span>Cập nhật dữ liệu <span class="dot">●</span> 24/08/2026</span>
+      <span>Kỳ nhập học tham chiếu · Fall 2027</span>
+    </div>
+  </header>
+
+  <div class="banner" id="banner">
+    <div class="seal">NT$<br>100K</div>
+    <div class="txt">
+      <b>E.SUN ASEAN Scholarship</b> — dành cho công dân Việt Nam, bậc Master, chỉ áp dụng nếu trúng tuyển NTU/NSYSU (trong 15 trường) hoặc NCCU/NTNU/NTPU/NCKU.
+      <span> Đợt nộp 2026 đóng ngày 20/09/2026</span> — chỉ còn gần 4 tuần, nên chủ động nhắc khách hồ sơ mạnh ngay.
+    </div>
+    <button id="closeBanner">Đóng</button>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Hồ sơ khách</h2>
+      <p class="hint">Điền càng đầy đủ càng chính xác — hệ thống tính điểm hồ sơ theo thang 100 (GPA, ngôn ngữ, thứ hạng, SOP, LOR, kinh nghiệm) để xếp loại và gợi ý nhóm trường phù hợp.</p>
+
+      <div class="field">
+        <label>Tên khách hàng</label>
+        <input type="text" id="hoTenInput" placeholder="vd: Nguyễn Văn A" />
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Số điện thoại</label>
+          <input type="text" id="sdtInput" placeholder="vd: 0912345678" />
+        </div>
+        <div class="field">
+          <label>Email (tùy chọn)</label>
+          <input type="text" id="emailInput" placeholder="vd: a@gmail.com" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>GPA (thang 4.0)</label>
+        <input type="number" id="gpaInput" min="0" max="4" step="0.1" placeholder="vd: 3.2" />
+      </div>
+
+      <div class="row3">
+        <div class="field">
+          <label>IELTS Overall</label>
+          <input type="number" id="ieltsInput" min="0" max="9" step="0.5" placeholder="vd: 6.0" />
+        </div>
+        <div class="field">
+          <label>TOEIC</label>
+          <input type="number" id="toeicInput" min="0" max="990" step="5" placeholder="vd: 750" />
+        </div>
+        <div class="field">
+          <label>TOCFL</label>
+          <input type="text" id="tocflInput" placeholder="vd: B1" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Ngành học quan tâm (tùy chọn)</label>
+        <input type="text" id="majorInput" placeholder="vd: Business, IT, Kỹ thuật..." />
+      </div>
+
+      <div class="field">
+        <label>Giải thưởng / thành tích nổi bật (tùy chọn)</label>
+        <input type="text" id="awardsInput" placeholder="vd: Giải Nhì HSG Tỉnh, chứng chỉ nghiên cứu..." />
+      </div>
+
+      <div class="field-section-title">Đánh giá chi tiết hồ sơ (thang điểm nội bộ)</div>
+
+      <div class="field">
+        <label>Thứ hạng trong lớp (top %, nếu biết)</label>
+        <input type="number" id="rankInput" min="1" max="100" step="1" placeholder="vd: 15 (tức top 15%)" />
+      </div>
+
+      <div class="field">
+        <label>Kế hoạch học tập / Bài luận (Study Plan)</label>
+        <select id="sopInput">
+          <option value="">— Chọn mức độ —</option>
+          <option value="none">Chưa có</option>
+          <option value="basic">Sơ sài, viết chung chung</option>
+          <option value="good">Khá tốt, có định hướng rõ ngành/trường</option>
+          <option value="strong">Rất mạnh, khớp đúng ngành/lab, thuyết phục</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Thư giới thiệu (LOR)</label>
+        <select id="lorInput">
+          <option value="">— Chọn —</option>
+          <option value="none">Chưa có</option>
+          <option value="one">Có 1 thư</option>
+          <option value="two">Có 2 thư trở lên, từ giảng viên/quản lý</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Kinh nghiệm làm việc / hoạt động ngoại khoá</label>
+        <select id="expInput">
+          <option value="">— Chọn —</option>
+          <option value="none">Không có</option>
+          <option value="some">Có một vài hoạt động</option>
+          <option value="strong">Nhiều hoạt động, có internship liên quan ngành</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Ưu tiên ngân sách</label>
+        <div class="toggle-group">
+          <label class="toggle-opt active" id="optFull">
+            <input type="radio" name="budget" value="full" checked /> Cần học bổng cao / toàn phần
+          </label>
+          <label class="toggle-opt" id="optPartial">
+            <input type="radio" name="budget" value="partial" /> Chấp nhận học bổng một phần
+          </label>
+        </div>
+      </div>
+
+      <p class="save-status" id="saveStatus"></p>
+
+      <button class="btn-primary" id="submitBtn">Tìm học bổng &amp; lưu khách hàng</button>
+    </div>
+
+    <div id="resultsArea">
+      <div class="empty-state" id="emptyState">
+        <div class="glyph">⛭</div>
+        <p>Nhập GPA (bắt buộc) và càng nhiều thông tin khác càng tốt, sau đó bấm "Tìm học bổng & lưu khách hàng" để xem điểm hồ sơ và danh sách trường phù hợp.</p>
+      </div>
+      <div id="resultsContent" class="hidden"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Cập nhật 24/08/2026. Deadline Fall 2027 phần lớn CHƯA công bố — không bịa thêm. */
+const SCHOOLS = [
+  {id:"asia-univ", name:"Asia University", city:"Đài Trung", group:1, badge:"green",
+   badgeText:"Full tuition + KTX 50% + trợ cấp/tháng (Type A+)", rating:5, fits:["A","B"],
+   desc:"Học bổng chia 4 mức (A+/A/B/C). Master được xét tối đa 2 năm.",
+   note:"Xét theo hồ sơ, chương trình đăng ký và ngân sách trường — không mặc định đậu là có full học bổng.", deadline:null,
+   url:"https://ciae.asia.edu.tw/en/SCHOLARSHIPS/Scholarships",
+   dieuKien:"Nộp cùng lúc hồ sơ nhập học. Không áp dụng nếu đã nhận học bổng toàn phần từ chính phủ. Xét theo bảng điểm, chứng chỉ ngôn ngữ và ý kiến khoa/viện, trình hội đồng trường duyệt.",
+   duyTri:"Master/PhD: điểm TB năm trước phải ≥80 (ĐH ≥75). Người nhận loại A/A+ và B phải có bài báo được chấp nhận/đăng trên hội nghị hoặc tạp chí Scopus trong vòng 1 năm (Master) / 1.5 năm (PhD) kể từ ngày nhập học. Hạnh kiểm kỳ trước <80 hoặc bị 1 tiểu kỷ luật → hạ 1 bậc học bổng; hạnh kiểm <75 hoặc đại kỷ luật → cắt học bổng. Bảo lưu/nghỉ học/chuyển trường → mất học bổng."},
+  {id:"nkust", name:"NKUST", city:"Cao Hùng", group:1, badge:"green",
+   badgeText:"Miễn học phí + phí + NT$6.000/tháng (1 năm)", rating:5, fits:["A","B"],
+   desc:"National Kaohsiung University of Science and Technology — mạnh về Business/Engineering/IT/Maritime/Design.",
+   note:"QUAN TRỌNG: phải nộp đơn học bổng CÙNG LÚC với hồ sơ nhập học, không phải đậu rồi mới xin. Suất phân theo college.", deadline:null,
+   url:"https://oia.nkust.edu.tw/en/unit-11-262-5.html",
+   dieuKien:"Không áp dụng cho sinh viên Hoa kiều, Trung Quốc đại lục, chương trình song bằng, trao đổi, hoặc sinh viên đã được tài trợ từ chương trình bên ngoài. Cần nộp minh chứng tài chính riêng (~USD 3.800) — học bổng NKUST đang chờ duyệt KHÔNG được chấp nhận làm minh chứng tài chính khi nộp hồ sơ.",
+   duyTri:"Chỉ cấp cố định 1 năm (Master NT$6.000/tháng + miễn học phí), không thấy quy định gia hạn tự động công khai — cần hỏi trực tiếp OIA về khả năng xin tiếp cho các năm sau."},
+  {id:"nuk", name:"NUK", city:"Cao Hùng", group:1, badge:"green",
+   badgeText:"Miễn HP / HP+phí / 50% / có trợ cấp — tùy xét duyệt", rating:5, fits:["A","B"],
+   desc:"National University of Kaohsiung — Foreign Student Admission Scholarship, xét bởi hội đồng trường.",
+   note:"Nộp scholarship cùng lúc application, kèm bảng điểm & chứng chỉ ngôn ngữ.",
+   deadline:"Fall 2027: mở 25/02 · hạn 23/04 · KQ 15/06/2027 · Spring 2027: mở 08/10 · hạn 02/11/2026 · KQ 17/12/2026",
+   url:"https://rinteradmission.nuk.edu.tw/",
+   dieuKien:"Yêu cầu ngôn ngữ: TOCFL A2 trở lên hoặc tương đương HSK 4 (miễn nếu học chương trình toàn tiếng Anh), cộng thêm minh chứng tiếng Anh/ngôn ngữ theo yêu cầu riêng của khoa. Học bổng nhập học ('admission scholarship') chỉ cấp 1 LẦN duy nhất, phủ khoảng 20–50% học phí kỳ/năm đầu.",
+   duyTri:"Từ năm 2 trở đi PHẢI nộp lại đơn xin 'Học bổng sinh viên chính quy' (Foreign Degree Student Scholarship) mỗi năm — mức và có được duyệt hay không tùy ngân sách & số người nộp năm đó, KHÔNG đảm bảo tự động gia hạn."},
+  {id:"ishou", name:"I-Shou University", city:"Cao Hùng", group:1, badge:"green",
+   badgeText:"Có international scholarships", rating:4, fits:["B"],
+   desc:"Lựa chọn bổ sung tốt cho admission + học bổng khi cần thêm phương án an toàn.", note:null, deadline:null,
+   url:"https://oica.isu.edu.tw/en-US/page/Inbound%20Scholarships-ePA3M1uPEGXo",
+   dieuKien:"SV mới: hội đồng xét học bổng đánh giá theo tỉ lệ số đơn nộp lúc nhập học. Hồ sơ cần: đơn xin, CV, thư giới thiệu (Anh/Trung), bảng điểm.",
+   duyTri:"Số lần tối đa được nhận: Đại học 4 lần, Master 2 lần, PhD 3 lần. Điều kiện giữ học bổng: xếp hạng trong top 40% lớp theo điểm TB kỳ, hạnh kiểm ≥85 điểm, có tối thiểu 2 môn tự chọn/kỳ, phải hoàn thành giờ phục vụ cộng đồng (Service Learning). Bị hủy nếu: SV mới không hoàn tất đăng ký, điểm danh 9 tuần đầu kỳ dưới 70%, có kỷ luật, hoặc hạnh kiểm ≤85."},
+  {id:"providence", name:"Providence University", city:"Đài Trung", group:1, badge:"green",
+   badgeText:"Providence Grant ≈ học phí năm đầu (nếu TOEFL ITP 550+)", rating:4, fits:["B"],
+   desc:"Chương trình Master dạy hoàn toàn bằng tiếng Anh. Sau năm đầu, grant tiếp tục xét theo thành tích & xếp hạng lớp.",
+   note:null, deadline:null, url:"https://oia.pu.edu.tw/p/426-1048-11.php?Lang=en",
+   dieuKien:"Chương trình International Foundation Program (IFP) yêu cầu đạt TOCFL nghe-đọc mức A2 để được xét cấp học bổng bằng đúng mức học phí. Chương trình tiếng Anh (MBA/MS) xét TOEFL ITP 550+.",
+   duyTri:"Từ năm 2 trở đi: mức Providence Grant xét theo xếp hạng lớp kỳ trước — top 15% → NT$35.000, top 15,01–30% → NT$20.000, top 30,01–50% → NT$8.000. Yêu cầu điểm TB tổng ≥80, không có kỷ luật trong kỳ xét."},
+  {id:"fcu", name:"Feng Chia University", city:"Đài Trung", group:1, badge:"yellow",
+   badgeText:"University scholarship, nhiều chương trình English", rating:4, fits:["B"],
+   desc:"Đa dạng ngành dạy bằng tiếng Anh, phù hợp hồ sơ trung bình khá.", note:null, deadline:null,
+   url:"https://oia.fcu.edu.tw/en/overseas-students/scholarship/",
+   dieuKien:"Tick chọn xin học bổng ngay trong đơn nhập học (không nộp riêng). Không áp dụng nếu đã nhận Taiwan Scholarship (MOE/MOFA) song song.",
+   duyTri:"Trang OIA công khai chi tiết cho SV Hoa kiều & Taiwan Scholarship (yêu cầu ở Đài Loan ≥15 ngày/tháng, cần TOCFL Level 3 nếu học chương trình không toàn tiếng Anh) nhưng CHƯA công khai đầy đủ tiêu chí duy trì cho học bổng quốc tế riêng của trường (NT$120.000/60.000) — cần hỏi trực tiếp OIA."},
+  {id:"nsysu", name:"National Sun Yat-sen University", city:"Cao Hùng", group:2, badge:"yellow",
+   badgeText:"Scholarship + research opportunities", rating:3, fits:["A"],
+   desc:"Đã công bố kết quả học bổng Fall 2026; thời gian học bổng Master kéo dài 09/2026–07/2028 cho người trúng tuyển.",
+   note:"Ưu tiên hồ sơ GPA 3.5+ và có định hướng nghiên cứu rõ. Cần xem cụ thể theo từng ngành/lab.", deadline:null,
+   url:"https://oia.nsysu.edu.tw/p/412-1308-20732.php?Lang=en",
+   dieuKien:"Nộp cùng đơn nhập học, không cần đơn riêng.",
+   duyTri:"Thời hạn học bổng gắn với kỳ trúng tuyển (vd Fall 2026: 09/2026–07/2028). Bị TẠM NGƯNG nếu vắng mặt khỏi Đài Loan quá 1 tháng (trừ nghỉ hè/đông); vắng liên tục 2 tháng → BỊ HỦY hoàn toàn. PhD đổi giáo sư hướng dẫn → học bổng bị hủy."},
+  {id:"nchu", name:"National Chung Hsing University", city:"Đài Trung", group:2, badge:"yellow",
+   badgeText:"University / research scholarships", rating:3, fits:["A"], desc:"Mạnh về STEM, Nông nghiệp, Kinh doanh.", note:null, deadline:null,
+   url:"https://oia.nchu.edu.tw/index.php/1-1-about-en-2/2-8-scholarships-en/2-8-1-nchu-scholarships-en",
+   dieuKien:"SV mới: tick chọn xin học bổng ngay trong hệ thống nộp hồ sơ nhập học, không cần hồ sơ riêng.",
+   duyTri:"SV đang học (từ năm 2) phải nộp lại hồ sơ MỖI NĂM gồm: bảng điểm có xếp hạng lớp, thư giới thiệu từ giảng viên hướng dẫn/trưởng khoa, và tài liệu bổ sung (thành tích nghiên cứu, hoạt động, chứng chỉ...) để tăng thứ hạng xét duyệt. Yêu cầu điểm TB 2 kỳ gần nhất: Đại học ≥70, Sau đại học ≥80. Tối đa: Master 2 năm, PhD 4 năm (5 năm nếu vào thẳng PhD)."},
+  {id:"tunghai", name:"Tunghai University", city:"Đài Trung", group:2, badge:"yellow",
+   badgeText:"International scholarships", rating:3, fits:["B"], desc:null, note:null, deadline:null,
+   url:"https://eng.thu.edu.tw/web/study/detail.php?scid=34&sid=17",
+   dieuKien:"Nộp theo hướng dẫn công bố mỗi kỳ của Office of International Relations (OIR); SV đang học nộp form + thư giới thiệu cho OIR.",
+   duyTri:"Tối đa 4 năm cho bậc ĐH (5 năm ngành Kiến trúc), tối đa 2 năm cho Master/PhD theo quy định chung. Mức điểm cụ thể để duy trì mỗi kỳ KHÔNG được công bố chi tiết trên trang tiếng Anh — cần liên hệ trực tiếp OIR (oir@thu.edu.tw)."},
+  {id:"kmu", name:"Kaohsiung Medical University", city:"Cao Hùng", group:2, badge:"yellow",
+   badgeText:"International scholarships", rating:3, fits:["A"], desc:"Phù hợp hồ sơ định hướng Y — Dược — Khoa học sức khỏe.", note:null, deadline:null,
+   url:"https://ciae2.kmu.edu.tw/index.php/en-gb/international-students1/new-students/scholarships/2321-test",
+   dieuKien:"Đại học CHỈ được xin loại C (miễn học phí); Master xin được loại B/C; PhD xin được cả 3 loại A/B/C. Đăng ký cùng lúc đơn nhập học online.",
+   duyTri:"Học bổng CẠNH TRANH LẠI MỖI KỲ (renewed every semester), không tự động giữ nguyên. Điều kiện: Đại học cần điểm TB năm trước ≥70; Sau đại học cần ≥80. Xét qua đề cử của từng khoa/viện."},
+  {id:"ntust-tech", name:"Nat'l Taichung Univ. of Science and Technology", city:"Đài Trung", group:2, badge:"yellow",
+   badgeText:"Scholarship tùy chương trình", rating:3, fits:["B"], desc:null, note:null, deadline:null,
+   url:"https://www.studyintaiwan.org/how-to-apply/scholarship?p=7",
+   dieuKien:"Chưa có trang tiếng Anh công khai đầy đủ điều kiện xét — tham khảo cổng học bổng chính thức của Bộ Giáo dục Đài Loan (Study in Taiwan) hoặc liên hệ trực tiếp trường.",
+   duyTri:"Chưa có thông tin công khai chi tiết bằng tiếng Anh."},
+  {id:"ntcu-edu", name:"Nat'l Taichung University of Education", city:"Đài Trung", group:2, badge:"yellow",
+   badgeText:"Có scholarship, tiêu chí học lực khá cao", rating:3, fits:["A"], desc:null, note:null, deadline:null,
+   url:"https://www.studyintaiwan.org/how-to-apply/scholarship?q=c2NoPU5DQ1UtMDAwMS0zMg",
+   dieuKien:"Chưa có trang tiếng Anh công khai đầy đủ điều kiện xét — tham khảo cổng Study in Taiwan hoặc liên hệ trực tiếp trường.",
+   duyTri:"Chưa có thông tin công khai chi tiết bằng tiếng Anh."},
+  {id:"ntu", name:"National Taiwan University", city:"Đài Bắc", group:3, badge:"blue",
+   badgeText:"Top-tier — chưa có mức học bổng đại trà xác nhận", rating:3, fits:["A"],
+   desc:"Trường hàng đầu Đài Loan — nên coi là reach school, apply song song học bổng riêng lẻ (xem thẻ E.SUN bên dưới).", note:null, deadline:null,
+   url:"https://isss.ntu.edu.tw/finances/scholarships/",
+   dieuKien:"NTU có nhiều quỹ học bổng riêng biệt (CTCI Foundation, Gratitude & Heritage, E.SUN ASEAN...), mỗi loại có tiêu chí ngành học, quốc tịch và hồ sơ nộp khác nhau — không có một 'học bổng NTU chung' duy nhất.",
+   duyTri:"Đa số các quỹ yêu cầu SV nộp lại bảng điểm/minh chứng học tập theo kỳ hoặc theo năm để tiếp tục nhận; một số (như CTCI) chỉ cấp 1 lần không lặp lại."},
+  {id:"nycu", name:"Nat'l Yang Ming Chiao Tung University", city:"Tân Trúc", group:3, badge:"blue",
+   badgeText:"STEM / Technology — reach school", rating:3, fits:["A"], desc:null, note:null, deadline:null,
+   url:"https://oia.nycu.edu.tw/oia/en/app/data/list?module=nycu0015&id=799",
+   dieuKien:"Không áp dụng cho SV đang nhận học bổng chính phủ Đài Loan khác (Taiwan Scholarship, TIGP, ICDF, NSNT...) hoặc đang giữ ARC diện lao động.",
+   duyTri:"Gia hạn theo kỳ, yêu cầu điểm TB tích lũy: Đại học ≥3.0/4.0, Sau đại học ≥3.5/4.0. Sau đại học & Tiến sĩ phải hoàn thành tối thiểu 2 môn tiếng Hoa mỗi năm (trừ khi có minh chứng miễn). PhD diện Elite: điểm TB duy trì ≥3.76."},
+  {id:"ntust", name:"Nat'l Taiwan Univ. of Science and Technology", city:"Đài Bắc", group:3, badge:"blue",
+   badgeText:"Engineering / Business / Technology — reach school", rating:3, fits:["A"], desc:null, note:null, deadline:null,
+   url:"https://www.oia.ntust.edu.tw/p/412-1060-8931.php?Lang=en",
+   dieuKien:"SV mới nộp cùng đơn nhập học. Không áp dụng nếu đang nhận hỗ trợ tài chính khác từ NTUST hoặc chính phủ ROC (trừ vài ngoại lệ như trợ lý nghiên cứu/work-study).",
+   duyTri:"Có thể xin gia hạn vào cuối năm học đầu tiên nếu đạt yêu cầu học tập. Bị HỦY nếu: nghỉ phép quá 1 tháng, rời Đài Loan quá 1 tháng không phép trong kỳ, bỏ học giữa chừng không qua thủ tục chính thức, không hoàn tất đăng ký đúng hạn, vi phạm pháp luật/kỷ luật từ mức tiểu kỷ luật trở lên."},
+  {id:"nccu", name:"National Chengchi University", city:"Đài Bắc", group:3, badge:"green",
+   badgeText:"Miễn HP + có thể kèm NT$150.000/năm (New Inbound Pilot Plan)", rating:5, fits:["A"],
+   desc:"Đối tác E.SUN ASEAN. Có 3 loại học bổng cho SV mới: Tuition Waiver (miễn HP+phí tín chỉ), New Inbound Pilot Plan (miễn HP + trợ cấp NT$150.000/năm gồm cả vé máy bay), và Elite Scholarship cho giảng viên ĐNÁ đi học PhD.",
+   note:"SV KHÔNG tự nộp đơn cho học bổng năm đầu — khoa/viện đề cử nội bộ lên Phòng Hợp tác Quốc tế (OIC), không có form riêng cho SV.", deadline:null,
+   url:"https://oic.nccu.edu.tw/Post/1074",
+   dieuKien:"Chỉ áp dụng cho SV MỚI TRÚNG TUYỂN, chưa nhận học bổng nào khác. Khoa/viện tự lập danh sách đề cử — SV cá nhân KHÔNG nộp đơn riêng cho học bổng năm đầu.",
+   duyTri:"SV đang học (sau kỳ đầu) có thể xin riêng 'Academic Excellence Scholarship' — cần học tại NCCU tối thiểu 1 kỳ, nộp bảng điểm kỳ trước, không đang nhận học bổng toàn phần khác. Đơn nộp vào tháng 9 và cuối tháng 2 hàng năm."},
+  {id:"ntnu", name:"National Taiwan Normal University", city:"Đài Bắc", group:3, badge:"yellow",
+   badgeText:"Miễn học phí toàn phần (ĐH 1 năm / Master 2 năm / PhD 3 năm)", rating:4, fits:["A","B"],
+   desc:"Trường có đông sinh viên quốc tế nhất Đài Loan, mạnh về giáo dục & khoa học xã hội.", note:null, deadline:null,
+   url:"https://bds.oia.ntnu.edu.tw/bds/en/web/scholarship",
+   dieuKien:"SV mới nộp đơn xin học bổng CÙNG LÚC hồ sơ nhập học qua hệ thống International Students Application. Từng khoa quyết định ai được nhận và nộp danh sách cho Phòng Quốc tế (OIA).",
+   duyTri:"Phải hoàn tất đăng ký nhập học mỗi kỳ mới được nhận tiền/miễn học phí. Nghỉ học kéo dài giữa kỳ phải hoàn trả lại phần học phí đã được miễn."},
+  {id:"ntpu", name:"National Taipei University", city:"Tân Bắc (Sanxia)", group:3, badge:"green",
+   badgeText:"Có học bổng RIÊNG cho SV Việt Nam (ĐH & Master)", rating:5, fits:["A","B"],
+   desc:"Đối tác E.SUN ASEAN. Đặc biệt: có 'International Scholarships for Students of NTPU and Excellent High Schools and Universities in Vietnam' — học bổng riêng dành cho học sinh/SV Việt Nam bậc ĐH và Master, ngoài ra có NTPU Tuition Fee Remission cho Master/PhD.",
+   note:"Rất đáng chú ý cho khách Thiên Di vì có suất riêng cho người Việt — nhưng văn bản quy định & mẫu đơn hiện chỉ có bản tiếng Trung, cần dịch/hỏi kỹ trước khi tư vấn khách.", deadline:null,
+   url:"https://study.ntpu.edu.tw/web/application/degree_in.jsp?dm_id=DM1730966898103",
+   dieuKien:"Học bổng dành cho SV Việt Nam áp dụng cho ứng viên bậc ĐH và Master — cần xem quy định & mẫu đơn cụ thể (file .odt trên trang trường, chưa có bản tiếng Anh đầy đủ). Học bổng miễn giảm học phí (Tuition Fee Remission) cho Master/PhD hiện chỉ có bản tiếng Trung.",
+   duyTri:"Thông tin duy trì cụ thể theo từng loại học bổng chưa công khai bản tiếng Anh đầy đủ — cần liên hệ trực tiếp Phòng Quốc tế (OIA) NTPU để xin bản quy định chi tiết."},
+  {id:"ncku", name:"National Cheng Kung University", city:"Đài Nam (Tainan)", group:3, badge:"green",
+   badgeText:"Miễn học phí + trợ cấp/tháng (mức do từng college quyết định)", rating:5, fits:["A"],
+   desc:"Đối tác E.SUN ASEAN. NCKU Distinguished International Student Scholarship — miễn học phí + trợ cấp hàng tháng. Trường top nghiên cứu về Kỹ thuật, Kiến trúc, Y khoa.",
+   note:"Không cần nộp hồ sơ riêng cho năm đầu — hội đồng tuyển sinh tự xét cùng lúc admission, kết quả gửi kèm thư mời nhập học.", deadline:null,
+   url:"https://oia.ncku.edu.tw/p/404-1032-229890.php?Lang=en",
+   dieuKien:"Không áp dụng cho người đang giữ ARC diện lao động/work visa. Hoãn nhập học (defer) → mất học bổng, phải xét lại từ đầu khi quay lại. Ứng viên Master/PhD phải phỏng vấn (trực tiếp hoặc online) do khoa tổ chức.",
+   duyTri:"Tối đa: Master 2 năm, PhD 4 năm (SV học lên PhD từ Master được tính tổng tối đa 5 năm). Gia hạn phải nộp lại hồ sơ theo quy định mới nhất — bậc sau đại học cần nộp đề cương luận văn + thư giới thiệu từ giáo sư hướng dẫn."}
+];
+
+const SPECIAL = {
+  name:"E.SUN Bank ASEAN Scholarship",
+  desc:"Dành riêng cho công dân Việt Nam, Malaysia, Thái Lan, Campuchia, Myanmar — bậc Master. Chỉ áp dụng nếu trúng tuyển vào 1 trong các trường đối tác của quỹ E.SUN, KHÔNG áp dụng cho toàn bộ 15 trường trong danh sách trên.",
+  amount:"NT$100.000 / năm",
+  window:"Đợt 2026: 01/08 – 20/09/2026",
+  url:"https://isss.ntu.edu.tw/finances/scholarships/",
+  dieuKien:"Trường đối tác công bố chính thức: National Taiwan University (NTU), National Chengchi University (NCCU), National Taiwan Normal University (NTNU), National Taipei University (NTPU), National Cheng Kung University (NCKU), National Sun Yat-Sen University (NSYSU) — và một số trường khác có hợp tác với quỹ E.SUN nhưng chưa nêu tên cụ thể. Trong 15 trường ở danh sách trên, CHỈ có NTU và NSYSU nằm trong danh sách đối tác đã công bố. Không áp dụng cho chương trình song bằng (dual degree).",
+  duyTri:"Xét lại mỗi năm: cần đạt ít nhất 1 trong 3 điều kiện — top 30% lớp / GPA ≥3.0 (hoặc tương đương) / thành tích đặc biệt được quỹ E.SUN công nhận. Người nhận năm 1 có thể được xét tiếp năm 2 nếu quỹ duyệt lại."
+};
+
+const GROUP_LABEL = {1:"Nhóm 1 — Ưu tiên cho khách Việt Nam", 2:"Nhóm 2 — Hồ sơ khá, nên đánh", 3:"Nhóm 3 — Reach schools (hồ sơ mạnh)"};
+const STUB_LABEL = {1:"ƯU TIÊN", 2:"TIỀM NĂNG", 3:"REACH"};
+const PROFILE_COPY = {
+  A:{title:"Hồ sơ loại A — Hồ sơ mạnh (≥80/100 điểm)", text:"Đủ điều kiện nhắm các trường top (NTU, NSYSU, NCHU, NYCU, NTUST) song song với Asia University, NKUST để chắc suất học bổng cao."},
+  B:{title:"Hồ sơ loại B — Nhóm khách hàng vàng (60–79/100 điểm)", text:"Không quá yếu nhưng chưa cần cạnh tranh với NTU. Asia University, NKUST, NUK, Feng Chia, Providence, Tunghai, I-Shou là các lựa chọn cân bằng nhất."},
+  C:{title:"Hồ sơ loại C — Cần chiến lược từng bước (40–59/100 điểm)", text:"Không nên hứa học bổng toàn phần. Chiến lược: apply admission trước, học bổng một phần, rồi nâng cấp học bổng sau khi nhập học. Ưu tiên trường có scholarship linh hoạt."},
+  D:{title:"Hồ sơ cần củng cố trước khi apply (dưới 40/100 điểm)", text:"Điểm tổng hợp (học lực, ngôn ngữ, thứ hạng, SOP, LOR, kinh nghiệm) còn thấp. Nên tư vấn lộ trình cải thiện hồ sơ — ôn ngôn ngữ, viết lại Study Plan, xin thêm thư giới thiệu — trước khi chọn trường."}
+};
+
+let budget = "full";
+
+/* ===== Thang điểm nội bộ 100 điểm =====
+   GPA 25 · Ngôn ngữ (Anh, +bonus Trung) 20 · Thứ hạng lớp 15 · Study Plan 20 · LOR 10 · Kinh nghiệm 10 */
+function scoreGPA(gpaVal){
+  const g = parseFloat(gpaVal);
+  if(isNaN(g)) return 0;
+  if(g>=3.7) return 25;
+  if(g>=3.5) return 22;
+  if(g>=3.2) return 18;
+  if(g>=3.0) return 14;
+  if(g>=2.7) return 10;
+  return 5;
+}
+function scoreLanguage(ieltsVal, toeicVal, tocflVal){
+  let english = 0;
+  const i = parseFloat(ieltsVal);
+  if(!isNaN(i)){
+    if(i>=7.0) english = 16;
+    else if(i>=6.5) english = 14;
+    else if(i>=6.0) english = 11;
+    else if(i>=5.5) english = 8;
+    else if(i>=5.0) english = 5;
+    else english = 2;
+  }
+  const t = parseFloat(toeicVal);
+  if(!isNaN(t)){
+    let toeicPts;
+    if(t>=900) toeicPts = 16;
+    else if(t>=800) toeicPts = 14;
+    else if(t>=700) toeicPts = 11;
+    else if(t>=600) toeicPts = 8;
+    else if(t>=500) toeicPts = 5;
+    else toeicPts = 2;
+    english = Math.max(english, toeicPts);
+  }
+  let chineseBonus = 0;
+  const tocfl = (tocflVal||"").trim().toUpperCase();
+  if(tocfl.startsWith("C")) chineseBonus = 4;
+  else if(tocfl==="B2") chineseBonus = 3;
+  else if(tocfl==="B1") chineseBonus = 2;
+  else if(tocfl==="A2") chineseBonus = 1;
+  else if(tocfl==="A1") chineseBonus = 0.5;
+  return Math.min(20, english + chineseBonus);
+}
+function scoreRank(rankVal){
+  if(rankVal==="" || rankVal===null || rankVal===undefined) return 8; // chưa rõ — điểm trung tính
+  const r = parseFloat(rankVal);
+  if(isNaN(r)) return 8;
+  if(r<=10) return 15;
+  if(r<=20) return 12;
+  if(r<=30) return 9;
+  if(r<=50) return 6;
+  return 3;
+}
+const SOP_POINTS = {none:0, basic:8, good:14, strong:20};
+const LOR_POINTS = {none:0, one:5, two:10};
+const EXP_POINTS = {none:0, some:5, strong:10};
+
+function computeScore(p){
+  const gpaPts = scoreGPA(p.gpa);
+  const langPts = scoreLanguage(p.ielts, p.toeic, p.tocfl);
+  const rankPts = scoreRank(p.rank);
+  const sopPts = SOP_POINTS[p.sop] ?? 0;
+  const lorPts = LOR_POINTS[p.lor] ?? 0;
+  const expPts = EXP_POINTS[p.exp] ?? 0;
+  const total = Math.round(gpaPts+langPts+rankPts+sopPts+lorPts+expPts);
+  let tier;
+  if(total>=80) tier="A";
+  else if(total>=60) tier="B";
+  else if(total>=40) tier="C";
+  else tier="D";
+  return {
+    total, tier,
+    breakdown:[
+      {label:"Học lực (GPA)", pts:gpaPts, max:25},
+      {label:"Ngôn ngữ (Anh + Trung)", pts:langPts, max:20},
+      {label:"Thứ hạng lớp", pts:rankPts, max:15},
+      {label:"Kế hoạch học tập (SOP)", pts:sopPts, max:20},
+      {label:"Thư giới thiệu (LOR)", pts:lorPts, max:10},
+      {label:"Kinh nghiệm / hoạt động", pts:expPts, max:10}
+    ]
+  };
+}
+
+/* ===== Google Sheet lead capture =====
+   Dán URL Web App (Apps Script) của bạn vào đây, dạng:
+   https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+   Để trống thì tool vẫn chạy bình thường, chỉ là không lưu lead. */
+const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw9ogbJQTTob9OWRFpmUCzJFg4ob9KghubqEEYv20MK3zxO0DT-dFstjQGWqLnYEWf-/exec";
+
+/* Mã bí mật — PHẢI khớp với biến SECRET_KEY trong Apps Script thì mới ghi được vào Sheet.
+   Đây không phải bảo mật tuyệt đối (mã vẫn nằm trong mã nguồn trang), nhưng chặn được
+   người ngoài vô tình/random gửi rác vào Sheet nếu không cố tình xem source code. */
+const SHEET_SECRET_KEY = "dx-SN82HvqIZBK_E3WCGju3NHIqA5aoC";
+
+/* Chặn formula injection: nếu ô nhập liệu bắt đầu bằng = + - @, Google Sheets có thể
+   hiểu nhầm là công thức. Thêm dấu nháy đơn phía trước để ép hiển thị dạng chữ thường. */
+function sanitizeText(v){
+  if(v===null || v===undefined) return "";
+  const s = String(v);
+  return /^[=+\-@]/.test(s) ? ("'" + s) : s;
+}
+
+function sendLeadToSheet(payload){
+  const statusEl = document.getElementById("saveStatus");
+  if(!SHEET_WEBHOOK_URL){
+    statusEl.textContent = "Chưa kết nối Google Sheet — dữ liệu chỉ hiện tại đây, chưa được lưu.";
+    statusEl.className = "save-status err";
+    return;
+  }
+  const safePayload = {};
+  Object.keys(payload).forEach(k => { safePayload[k] = sanitizeText(payload[k]); });
+  safePayload.key = SHEET_SECRET_KEY;
+
+  statusEl.textContent = "Đang lưu vào danh sách khách hàng...";
+  statusEl.className = "save-status";
+  fetch(SHEET_WEBHOOK_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {"Content-Type": "text/plain"},
+    body: JSON.stringify(safePayload)
+  }).then(() => {
+    // no-cors: không đọc được response, coi như đã gửi thành công nếu không lỗi mạng
+    statusEl.textContent = "✓ Đã lưu vào danh sách khách hàng tiềm năng";
+    statusEl.className = "save-status ok";
+  }).catch(() => {
+    statusEl.textContent = "✗ Lỗi kết nối — chưa lưu được vào Google Sheet";
+    statusEl.className = "save-status err";
+  });
+}
+
+function esc(s){
+  if(s===null || s===undefined) return "";
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function starRow(rating){
+  return "★".repeat(rating) + "☆".repeat(5-rating);
+}
+
+function ticketHTML(s, tier){
+  const showNote = !!s.note;
+  const hasCriteria = s.dieuKien || s.duyTri;
+  return `
+  <div class="ticket">
+    <div class="ticket-main">
+      <div class="ticket-top">
+        <div>
+          <h5>${esc(s.name)}</h5>
+          <div class="ticket-city">${esc(s.city)}</div>
+        </div>
+        <div class="stars">${starRow(s.rating)}</div>
+      </div>
+      <span class="badge ${s.badge}">${esc(s.badgeText)}</span>
+      ${s.desc ? `<p class="ticket-desc">${esc(s.desc)}</p>` : ""}
+      ${showNote ? `<p class="ticket-note"><b>Ghi chú tư vấn:</b> ${esc(s.note)}</p>` : ""}
+      ${s.deadline ? `<div class="deadline-tag">${esc(s.deadline)}</div>` : ""}
+      ${s.url ? `<div class="official-link"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Trang học bổng chính thức ↗</a></div>` : ""}
+      ${hasCriteria ? `
+      <details class="criteria-box">
+        <summary>Điều kiện xét &amp; duy trì học bổng</summary>
+        ${s.dieuKien ? `<div class="crit-block"><b>Điều kiện xét</b>${esc(s.dieuKien)}</div>` : ""}
+        ${s.duyTri ? `<div class="crit-block"><b>Duy trì học bổng</b>${esc(s.duyTri)}</div>` : ""}
+      </details>` : ""}
+    </div>
+    <div class="ticket-stub">
+      ${s.fits.includes(tier) ? `<div class="fit-stamp">KHỚP<br>HỒ SƠ</div>` : ""}
+      <div class="tier-label">${STUB_LABEL[s.group].replace(" ", "<br>")}</div>
+    </div>
+  </div>`;
+}
+
+function getProfileFromForm(){
+  return {
+    gpa: document.getElementById("gpaInput").value,
+    ielts: document.getElementById("ieltsInput").value,
+    toeic: document.getElementById("toeicInput").value,
+    tocfl: document.getElementById("tocflInput").value,
+    rank: document.getElementById("rankInput").value,
+    sop: document.getElementById("sopInput").value,
+    lor: document.getElementById("lorInput").value,
+    exp: document.getElementById("expInput").value
+  };
+}
+
+function scoreCardHTML(scoreResult){
+  const rows = scoreResult.breakdown.map(b => `
+      <div class="score-row">
+        <span class="score-label">${esc(b.label)}</span>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${Math.round(b.pts/b.max*100)}%"></div></div>
+        <span class="score-pts">${b.pts}/${b.max}</span>
+      </div>`).join("");
+  return `
+    <div class="score-card">
+      <div class="score-total"><b>${scoreResult.total}</b><span>/ 100 điểm nội bộ</span></div>
+      ${rows}
+    </div>`;
+}
+
+function render(){
+  const profile = getProfileFromForm();
+
+  const emptyState = document.getElementById("emptyState");
+  const content = document.getElementById("resultsContent");
+
+  if(profile.gpa===""){
+    emptyState.classList.remove("hidden");
+    content.classList.add("hidden");
+    return null;
+  }
+  emptyState.classList.add("hidden");
+  content.classList.remove("hidden");
+
+  const scoreResult = computeScore(profile);
+  const tier = scoreResult.tier;
+
+  let html = scoreCardHTML(scoreResult);
+  html += `
+    <div class="profile-result">
+      <div class="profile-stamp"><b>${tier}</b><span>HỒ SƠ</span></div>
+      <div>
+        <h3>${PROFILE_COPY[tier].title}</h3>
+        <p>${PROFILE_COPY[tier].text}</p>
+      </div>
+    </div>`;
+
+  if(tier !== "D"){
+    let results = SCHOOLS.filter(s => s.fits.includes(tier) || (budget==="partial" && s.group<=2));
+    results.sort((a,b)=> a.group-b.group || b.rating-a.rating);
+
+    const grouped = {1:[],2:[],3:[]};
+    results.forEach(s => grouped[s.group].push(s));
+
+    [1,2,3].forEach(g => {
+      if(grouped[g].length===0) return;
+      html += `
+        <div class="group-heading">
+          <h4>${GROUP_LABEL[g]}</h4>
+          <div class="rule"></div>
+          <span class="count">${grouped[g].length} trường</span>
+        </div>`;
+      grouped[g].forEach(s => { html += ticketHTML(s, tier); });
+    });
+
+    html += `
+      <div class="group-heading">
+        <h4>Học bổng đặc biệt — theo quốc tịch (không thuộc 15 trường trên)</h4>
+        <div class="rule"></div>
+      </div>
+      <div class="ticket special-card">
+        <div class="ticket-main">
+          <div class="ticket-top">
+            <div>
+              <h5>${esc(SPECIAL.name)}</h5>
+              <div class="ticket-city">Đài Bắc</div>
+            </div>
+          </div>
+          <span class="badge blue">${esc(SPECIAL.amount)}</span>
+          <p class="ticket-desc">${esc(SPECIAL.desc)}</p>
+          <div class="deadline-tag">${esc(SPECIAL.window)}</div>
+          <div class="official-link"><a href="${esc(SPECIAL.url)}" target="_blank" rel="noopener noreferrer">Trang học bổng chính thức ↗</a></div>
+          <details class="criteria-box">
+            <summary>Điều kiện xét &amp; duy trì học bổng</summary>
+            <div class="crit-block"><b>Điều kiện xét</b>${esc(SPECIAL.dieuKien)}</div>
+            <div class="crit-block"><b>Duy trì học bổng</b>${esc(SPECIAL.duyTri)}</div>
+          </details>
+        </div>
+        <div class="ticket-stub">
+          <div class="tier-label">ĐẶC<br>BIỆT</div>
+        </div>
+      </div>`;
+
+    html += `
+      <div class="legend">
+        <span class="item"><span class="dotc" style="background:#3C6E52"></span>🟢 Full học phí / học phí+KTX/trợ cấp</span>
+        <span class="item"><span class="dotc" style="background:#A97727"></span>🟡 Học bổng một phần / tùy xét duyệt</span>
+        <span class="item"><span class="dotc" style="background:#3A5A78"></span>🔵 Học bổng chính phủ / đặc biệt theo diện riêng</span>
+      </div>
+      <p class="disclaimer">
+        Lưu ý nội bộ: không quảng cáo "học bổng 100%" khi chưa xác nhận theo từng trường/kỳ.
+        Hồ sơ loại A/B/C/D được tính từ thang điểm 100 nội bộ (GPA, ngôn ngữ, thứ hạng lớp, SOP, LOR, kinh nghiệm) — chỉ mang tính tham khảo định hướng, không thay thế đánh giá thực tế của hội đồng từng trường.
+        Nhiều deadline Fall 2027 CHƯA được các trường công bố tại thời điểm 24/08/2026. Link "Trang học bổng chính thức" trỏ đến trang Office of International Affairs / trang học bổng của từng trường — trường có thể đổi cấu trúc website, nên nếu link lỗi, tìm lại theo tên "[Tên trường] + international student scholarship".
+      </p>
+      <div class="print-bar">
+        <button id="printBtn">In / Xuất PDF cho khách</button>
+      </div>`;
+  }
+
+  content.innerHTML = html;
+  const printBtn = document.getElementById("printBtn");
+  if(printBtn) printBtn.addEventListener("click", () => window.print());
+  return scoreResult;
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const scoreResult = render();
+  const profile = getProfileFromForm();
+  sendLeadToSheet({
+    thoiGian: new Date().toISOString(),
+    hoTen: document.getElementById("hoTenInput").value,
+    soDienThoai: document.getElementById("sdtInput").value,
+    email: document.getElementById("emailInput").value,
+    gpa: profile.gpa,
+    ielts: profile.ielts,
+    toeic: profile.toeic,
+    tocfl: profile.tocfl,
+    thuHangLop: profile.rank,
+    studyPlan: profile.sop,
+    thuGioiThieu: profile.lor,
+    kinhNghiem: profile.exp,
+    nganh: document.getElementById("majorInput").value,
+    giaiThuong: document.getElementById("awardsInput").value,
+    nganSach: budget,
+    diemTong: scoreResult ? scoreResult.total : "",
+    hoSoLoai: scoreResult ? scoreResult.tier : ""
+  });
+});
+
+document.getElementById("closeBanner").addEventListener("click", () => {
+  document.getElementById("banner").classList.add("hidden");
+});
+
+document.getElementById("optFull").addEventListener("click", () => {
+  budget = "full";
+  document.getElementById("optFull").classList.add("active");
+  document.getElementById("optPartial").classList.remove("active");
+});
+document.getElementById("optPartial").addEventListener("click", () => {
+  budget = "partial";
+  document.getElementById("optPartial").classList.add("active");
+  document.getElementById("optFull").classList.remove("active");
+});
+</script>
+</body>
+</html>
